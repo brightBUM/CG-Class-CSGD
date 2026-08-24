@@ -28,7 +28,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
     }
 }
-
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
 
 int main(void)
 {
@@ -39,7 +42,7 @@ int main(void)
         return -1;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(1280, 720, "CG_class_csgd", NULL, NULL);
+    window = glfwCreateWindow(1000, 800, "CG_class_csgd", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -50,6 +53,7 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     glfwSetKeyCallback(window, key_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     //glad loader
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -64,7 +68,7 @@ int main(void)
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
-        /* Render here */
+        /* Render here */  
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(red, green, blue, 1.0f);
 
@@ -75,24 +79,26 @@ int main(void)
         glBegin(GL_POINTS);
 
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.3f, 0.0f, 0.0f);
 
         glVertex3f(0.5f, 0.0f, 0.0f);
         
-        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, -0.5f, 0.0f);
+        glVertex3f(-0.5f, -0.5f, 0.0f);
         glEnd();
 
 
-        //line loop
+        //line 
         glLineWidth(5.0f);
         glBegin(GL_LINE_LOOP);
         
         glColor3f(1.0f, 0.0f, 0.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f);
+        glVertex3f(0.3f, 0.0f, 0.0f);
         
         glVertex3f(0.5f, 0.0f, 0.0f);
         
-        glVertex3f(1.0f, 0.0f, 0.0f);
+        glVertex3f(0.0f, -0.5f, 0.0f);
+        glVertex3f(-0.5f, -0.5f, 0.0f);
 
         glEnd();
         /* Swap front and back buffers */
