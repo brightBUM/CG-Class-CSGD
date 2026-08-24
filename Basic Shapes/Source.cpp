@@ -79,27 +79,33 @@ int main(void)
         glBegin(GL_POINTS);
 
         glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(0.3f, 0.0f, 0.0f);
 
+        glVertex3f(0.3f, 0.0f, 0.0f);
         glVertex3f(0.5f, 0.0f, 0.0f);
-        
         glVertex3f(0.0f, -0.5f, 0.0f);
+
         glVertex3f(-0.5f, -0.5f, 0.0f);
+        glVertex3f(-0.5f, -0.0f, 0.0f);
+        glVertex3f(0.0f, 0.5f, 0.0f);
+        
         glEnd();
 
 
         //line 
         glLineWidth(5.0f);
-        glBegin(GL_LINE_LOOP);
+        glBegin(GL_TRIANGLES);
         
         glColor3f(1.0f, 0.0f, 0.0f);
+        
         glVertex3f(0.3f, 0.0f, 0.0f);
-        
         glVertex3f(0.5f, 0.0f, 0.0f);
-        
         glVertex3f(0.0f, -0.5f, 0.0f);
+        
+        glColor3f(1.0f, 0.5f, 0.0f);
+        
         glVertex3f(-0.5f, -0.5f, 0.0f);
-
+        glVertex3f(-0.5f, -0.0f, 0.0f);
+        glVertex3f(0.0f, 0.5f, 0.0f);
         glEnd();
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
