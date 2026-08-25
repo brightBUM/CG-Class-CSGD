@@ -32,7 +32,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
-
+const float Rad2Deg = 57.29f;
+const float Deg2Rad = 0.01745f;
 int main(void)
 {
     GLFWwindow* window;
@@ -62,7 +63,8 @@ int main(void)
         return -1;
     }
 
-
+    float radius = 0.5f;
+    glPolygonMode(GL_FRONT, GL_LINE);
 
     std::cout << "starting game loop - basic shapes" << std::endl;
     /* Loop until the user closes the window */
@@ -80,13 +82,15 @@ int main(void)
 
         glColor3f(1.0f, 1.0f, 1.0f);
 
-        glVertex3f(0.3f, 0.0f, 0.0f);
-        glVertex3f(0.5f, 0.0f, 0.0f);
-        glVertex3f(0.0f, -0.5f, 0.0f);
+        glVertex3f(0.0f, 0.0f, 0.0f); // 1
+        int angleinDegrees = 0;
+        for (int i = 0;i <= 10;i++)
+        {
+            angleinDegrees = 36*i;
+            glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
 
-        glVertex3f(-0.5f, -0.5f, 0.0f);
-        glVertex3f(-0.5f, -0.0f, 0.0f);
-        glVertex3f(0.0f, 0.5f, 0.0f);
+        }
+       
         
         glEnd();
 
@@ -98,19 +102,20 @@ int main(void)
         // gl_traingle_strip - 1-2-3, 2-3-4, 3-4-5, 4-5-6
         //line 
         glLineWidth(5.0f);
-        glBegin(GL_TRIANGLE_STRIP);
+        glBegin(GL_TRIANGLE_FAN);
         
         glColor3f(1.0f, 0.0f, 0.0f);
         
-        glVertex3f(0.3f, 0.0f, 0.0f); //1
-        glVertex3f(0.5f, 0.0f, 0.0f);//2
-        glVertex3f(0.0f, -0.5f, 0.0f);//3
-        
-        
-        glColor3f(1.0f, 0.5f, 0.0f);
-        glVertex3f(-0.5f, -0.5f, 0.0f);//4
-        glVertex3f(-0.5f, -0.0f, 0.0f);//5
-        glVertex3f(0.0f, 0.5f, 0.0f);//6
+        glVertex3f(0.0f, 0.0f, 0.0f); // 1
+        angleinDegrees = 0;
+        for (int i = 0;i <= 10;i++)
+        {
+            angleinDegrees = 36 * i;
+            glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
+
+        }
+
+      
         glEnd();
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
