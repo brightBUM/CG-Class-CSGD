@@ -90,22 +90,27 @@ int main(void)
         
         glEnd();
 
-
+        //gl_lines - join 1-2 , 3-4 , 5-6
+        //gl_line_strip - join 1-2-3-4-5-6
+        // gl_line_loop - joine 1-2-3-4-5-6-1
+        
+        //gl_triangles - 1-2-3 , 4-5-6
+        // gl_traingle_strip - 1-2-3, 2-3-4, 3-4-5, 4-5-6
         //line 
         glLineWidth(5.0f);
-        glBegin(GL_TRIANGLES);
+        glBegin(GL_TRIANGLE_STRIP);
         
         glColor3f(1.0f, 0.0f, 0.0f);
         
-        glVertex3f(0.3f, 0.0f, 0.0f);
-        glVertex3f(0.5f, 0.0f, 0.0f);
-        glVertex3f(0.0f, -0.5f, 0.0f);
+        glVertex3f(0.3f, 0.0f, 0.0f); //1
+        glVertex3f(0.5f, 0.0f, 0.0f);//2
+        glVertex3f(0.0f, -0.5f, 0.0f);//3
+        
         
         glColor3f(1.0f, 0.5f, 0.0f);
-        
-        glVertex3f(-0.5f, -0.5f, 0.0f);
-        glVertex3f(-0.5f, -0.0f, 0.0f);
-        glVertex3f(0.0f, 0.5f, 0.0f);
+        glVertex3f(-0.5f, -0.5f, 0.0f);//4
+        glVertex3f(-0.5f, -0.0f, 0.0f);//5
+        glVertex3f(0.0f, 0.5f, 0.0f);//6
         glEnd();
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
