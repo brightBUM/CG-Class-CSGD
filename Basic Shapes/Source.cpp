@@ -64,7 +64,7 @@ int main(void)
     }
 
     float radius = 0.5f;
-    glPolygonMode(GL_FRONT, GL_LINE);
+    //glPolygonMode(GL_FRONT, GL_LINE);
 
     std::cout << "starting game loop - basic shapes" << std::endl;
     /* Loop until the user closes the window */
@@ -84,9 +84,10 @@ int main(void)
 
         glVertex3f(0.0f, 0.0f, 0.0f); // 1
         int angleinDegrees = 0;
-        for (int i = 0;i <= 10;i++)
+
+        for (int i = 0;i <= 360;i+=10)
         {
-            angleinDegrees = 36*i;
+            angleinDegrees = i;
             glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
 
         }
@@ -104,13 +105,14 @@ int main(void)
         glLineWidth(5.0f);
         glBegin(GL_TRIANGLE_FAN);
         
-        glColor3f(1.0f, 0.0f, 0.0f);
         
+        glColor3f(1.0f,1.0f, 1.0f);
         glVertex3f(0.0f, 0.0f, 0.0f); // 1
         angleinDegrees = 0;
-        for (int i = 0;i <= 10;i++)
+        glColor3f(1.0f, 0.0f, 0.0f);
+        for (int i = 0;i <= 360;i += 10)
         {
-            angleinDegrees = 36 * i;
+            angleinDegrees = i;
             glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
 
         }
