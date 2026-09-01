@@ -5,20 +5,27 @@
 
 #define Width 800
 #define Height 800
-#define Gravity -9.8
+#define Gravity -9.8f
 #define PI 3.14
 #define Log(x) std::cout<<x<<std::endl;
 
 
 #pragma region GlobalVariables
 
-
 const float Rad2Deg = 57.29f;
 const float Deg2Rad = 0.01745f;
-glm::vec3 point1 = glm::vec3(1.0f, 0.0f, 0.0f);
-glm::vec2 point2 = glm::vec2(1.0f, 0.0f);
 float red, green, blue;
 bool flipColor;
+
+glm::vec3 A = glm::vec3(-0.5f, 0.5f, 0.0f); //-1 to 1
+glm::vec3 B = glm::vec3(0.5f, 0.5f, 0.0f);
+glm::vec3 C = glm::vec3(0.5f, -0.5f, 0.0f);
+glm::vec3 D = glm::vec3(-0.5f, -0.5f, 0.0f);
+
+glm::vec3 redColor = glm::vec3(1.0f, 0.0f, 0.0f);  // 0 to 1
+glm::vec3 orangeColor = glm::vec3(1.0f, 0.5f, 0.0f);
+glm::vec3 whiteColor = glm::vec3(1.0f, 1.0f, 1.0f);
+glm::vec3 parrotGreenColor = glm::vec3(0.267f, 0.902f, 0.271f);
 #pragma endregion
 
 #pragma region FwdDeclaration
@@ -50,6 +57,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
+void DrawVertex(glm::vec3 point)
+{
+    glVertex3f(point.x, point.y, point.z);
+}
+void DefineColor(glm::vec3 color)
+{
+    glColor3f(color.x, color.y, color.z);
+}
+
 #pragma endregion
 
 
@@ -89,7 +105,7 @@ int main(void)
 
 
     float radius = 0.5f;
-    glPolygonMode(GL_FRONT, GL_LINE);
+    //glPolygonMode(GL_FRONT, GL_LINE);
     Log("gravity value = "<<Gravity);
     Log("Radian to degree "<<Rad2Deg);
     Log("redColor =  "<<red);
@@ -105,45 +121,27 @@ int main(void)
         glPointSize(10.0f);
         //rendering code
 
+        DefineColor(orangeColor);
         //points
         glBegin(GL_POINTS);
 
-        glColor3f(1.0f, 1.0f, 1.0f);
-
-        glVertex3f(0.0f, 0.0f, 0.0f); // 1
-        int angleinDegrees = 0;
-
-        for (int i = 0;i <= 360;i += 10)
-        {
-            angleinDegrees = i;
-            glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
-
-        }
-
+        DrawVertex(A);
+        DrawVertex(B);
+        DrawVertex(C);
+        DrawVertex(D);
 
         glEnd();
 
-        //gl_lines - join 1-2 , 3-4 , 5-6
-        //gl_line_strip - join 1-2-3-4-5-6
-        // gl_line_loop - joine 1-2-3-4-5-6-1
+        DefineColor(parrotGreenColor);
 
-        //gl_triangles - 1-2-3 , 4-5-6
-        // gl_traingle_strip - 1-2-3, 2-3-4, 3-4-5, 4-5-6
-        //line 
+
         glLineWidth(5.0f);
-        glBegin(GL_TRIANGLE_FAN);
+        glBegin(GL_QUADS);
 
-        glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex3f(0.0f, 0.0f, 0.0f); // 1
-        angleinDegrees = 0;
-        glColor3f(1.0f, 0.0f, 0.0f);
-        for (int i = 0;i <= 360;i += 10)
-        {
-            angleinDegrees = i;
-            glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
-
-        }
-
+        DrawVertex(A);
+        DrawVertex(B);
+        DrawVertex(C);
+        DrawVertex(D);
 
         glEnd();
         /* Swap front and back buffers */
