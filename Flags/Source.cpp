@@ -123,13 +123,7 @@ int main(void)
 
 #pragma region RenderLoop
 
-
     float radius = 0.5f;
-    glPolygonMode(GL_FRONT, GL_LINE);
-    Log("gravity value = " << Gravity);
-    Log("Radian to degree " << Rad2Deg);
-    Log("redColor =  " << red);
-
     std::cout << "starting game loop - basic shapes" << std::endl;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -138,61 +132,65 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(red, green, blue, 1.0f);
 
-        glPointSize(10.0f);
         //rendering code
 
-        DefineColor(orangeColor);
-        //points
-        glBegin(GL_POINTS);
+#pragma region IndianFlag
+        //glPolygonMode(GL_FRONT, GL_LINE);
+        //glLineWidth(3.0f);
+        ////orange color
+        //DefineColor(orangeColor);
+        //glBegin(GL_QUADS);
 
-        DrawVertex(A);
-        DrawVertex(B);
-        DrawVertex(C);
-        DrawVertex(D);
+        //DefineRect(glm::vec3(-1.0f, 0.9f, 0.f), 2.0f, 0.6f);
 
-        glEnd();
+        //glEnd();
 
+        ////white color
+        //DefineColor(whiteColor);
+        //glBegin(GL_QUADS);
 
+        //DefineRect(glm::vec3(-1.0f, 0.3f, 0.f), 2.0f, 0.6f);
 
-        glLineWidth(3.0f);
-        //orange color
-        DefineColor(orangeColor);
-        glBegin(GL_QUADS);
+        //glEnd();
 
-        DefineRect(glm::vec3(-1.0f, 0.9f, 0.f), 2.0f, 0.6f);
+        ////green color
+        //DefineColor(parrotGreenColor);
+        //glBegin(GL_QUADS);
 
-        glEnd();
+        //DefineRect(glm::vec3(-1.0f, -0.3f, 0.f), 2.0f, 0.6f);
+
+        //glEnd();
+
+        ////ashok chakra
+        //DefineColor(blueColor);
+        //glBegin(GL_TRIANGLE_FAN);
+
+        //DefineCircle(glm::vec3(0.0f, 0.0f, 0.0f), 0.3f);
+
+        //glEnd();
+#pragma endregion
+
+#pragma region JapanFlag
+        glPolygonMode(GL_FRONT, GL_FILL);
 
         //white color
         DefineColor(whiteColor);
         glBegin(GL_QUADS);
 
-        DefineRect(glm::vec3(-1.0f, 0.3f, 0.f), 2.0f, 0.6f);
+        DefineRect(glm::vec3(-1.0f, 0.8f, 0.f), 2.0f, 1.6f);
 
         glEnd();
-
-        //green color
-        DefineColor(parrotGreenColor);
-        glBegin(GL_QUADS);
-
-        DefineRect(glm::vec3(-1.0f, -0.3f, 0.f), 2.0f, 0.6f);
-
-        glEnd();
-
-        //ashok chakra
-        DefineColor(blueColor);
+        //red circle
+        DefineColor(redColor);
         glBegin(GL_TRIANGLE_FAN);
 
         DefineCircle(glm::vec3(0.0f, 0.0f, 0.0f), 0.3f);
 
         glEnd();
-
+#pragma endregion
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
-
-        //std::cout << "inside game loop" << std::endl;
-
 
         /* Poll for and process events */
         glfwPollEvents();
