@@ -6,5 +6,6 @@
   <Project Path="Basic Shapes/Basic Shapes.vcxproj" Id="ea424940-3cf6-4b83-adc6-16301ca0e2a1" />
   <Project Path="CG-Class-CSGD/CG-Class-CSGD.vcxproj" Id="fdd9e15a-69ad-47af-a75c-f0a12ffaee42" />
   <Project Path="Flags/Flags.vcxproj" Id="de1daca0-bdc1-4a4e-990a-1ed6cf6ee586" />
+  <Project Path="LineRenderer/LineRenderer.vcxproj" Id="b4172839-18de-44d4-892b-2c8c2184f1f6" />
   <Project Path="Quads/Quads.vcxproj" Id="8524ae35-cef3-4efe-a5c3-27a2204da5c5" />
 </Solution>
