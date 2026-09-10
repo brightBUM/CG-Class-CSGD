@@ -18,6 +18,7 @@ const float Deg2Rad = 0.01745f;
 float red, green, blue;
 bool flipColor;
 float angleinDegrees = 0.0f;
+int pointIndex = -1;
 
 glm::vec3 redColor = glm::vec3(1.0f, 0.0f, 0.0f);  // 0 to 1
 glm::vec3 orangeColor = glm::vec3(1.0f, 0.5f, 0.0f);
@@ -29,12 +30,19 @@ std::vector<glm::vec3> points;
 #pragma endregion
 
 #pragma region FwdDeclaration
-
+bool PointInCircleCheck(glm::vec3 centre, float radius, glm::vec3 point)
+{
+    auto distance = glm::distance(centre, point);
+    Log(distance);
+    return distance < radius;
+}
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     //Log("mouse screen pos : " << xpos << " , "<<ypos);
     worldX = xpos / (double)Width * 2.0f - 1.0f;
     worldY = 1.0f - ypos / (double)Height * 2.0f;
+    
+    
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
@@ -44,7 +52,31 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         Log("mouse world pos : " << worldX << " , " << worldY);
         points.push_back(glm::vec3(worldX, worldY, 0.0f));
     }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_PRESS))
+    {
+        if (pointIndex != -1)
+            return;
+
+        for (int i = 0;i < points.size();i++)
+        {
+            if (PointInCircleCheck(points[i], 0.2f, glm::vec3(worldX, worldY, 0.0f)))
+            {
+                //cursor in range of this point 
+                //pick up
+                pointIndex = i;
+            }
+        }
+        
+        
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_RELEASE))
+    {
+        pointIndex = -1;
+        //-1 meaning free to select new point
+
+    }
 }
+
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
@@ -130,7 +162,7 @@ int main(void)
     //mousepress and cursor pos
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
-
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
     //glad loader
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -154,12 +186,35 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(red, green, blue, 1.0f);
 
-        glLineWidth(5.0f);
-        //rendering code
-        glBegin(GL_LINES);
-        
-        for (int i = 0;i < points.size()-1;i++)
+
+        //input code
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1))
         {
+            /*Log("left click held");*/
+            if (pointIndex != -1)
+            {
+                points[pointIndex] = glm::vec3(worldX, worldY, 0.0f);
+            }
+        }
+
+        //rendering code
+        glLineWidth(5.0f);
+        glPointSize(10.0f);
+        //points
+        glBegin(GL_POINTS);
+        DefineColor(whiteColor);
+        for (int i = 0;i < points.size() - 1;i++)
+        {
+            DrawVertex(points[i]);
+            DrawVertex(points[i + 1]);
+        }
+
+        glEnd();
+        //lines
+        glBegin(GL_LINES);
+        DefineColor(orangeColor);
+        for (int i = 0;i < points.size()-1;i++)
+        { 
             DrawVertex(points[i]);
             DrawVertex(points[i + 1]);
         }
