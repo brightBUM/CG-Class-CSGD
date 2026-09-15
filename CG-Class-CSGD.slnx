@@ -8,4 +8,5 @@
   <Project Path="Flags/Flags.vcxproj" Id="de1daca0-bdc1-4a4e-990a-1ed6cf6ee586" />
   <Project Path="LineRenderer/LineRenderer.vcxproj" Id="b4172839-18de-44d4-892b-2c8c2184f1f6" />
   <Project Path="Quads/Quads.vcxproj" Id="8524ae35-cef3-4efe-a5c3-27a2204da5c5" />
+  <Project Path="RectDrag/RectDrag.vcxproj" Id="bfb0a8b4-bb14-429c-909c-256773525a13" />
 </Solution>
