@@ -1,8 +1,9 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
-#include<iostream>
+#include<iostream>  
 #include<glm/glm.hpp>
 #include<vector>
+#include"Rect.hpp"
 
 #define Width 800
 #define Height 800
@@ -20,10 +21,6 @@ bool flipColor;
 float angleinDegrees = 0.0f;
 int pointIndex = -1;
 
-//rect
-glm::vec3 origin = glm::vec3(0.0f);
-float length = 0.5f;
-float breadth = 0.5f;
 glm::vec3 redColor = glm::vec3(1.0f, 0.0f, 0.0f);  // 0 to 1
 glm::vec3 orangeColor = glm::vec3(1.0f, 0.5f, 0.0f);
 glm::vec3 whiteColor = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -31,6 +28,7 @@ glm::vec3 parrotGreenColor = glm::vec3(0.267f, 0.902f, 0.271f);
 glm::vec3 blueColor = glm::vec3(0.0f, 0.0f, 11.0f);
 double worldX, worldY;
 std::vector<glm::vec3> points;
+std::vector<Rect> rectangles;
 #pragma endregion
 
 #pragma region FwdDeclaration
@@ -39,12 +37,12 @@ bool PointInCircleCheck(glm::vec3 centre, float radius, glm::vec3 point)
     auto distance = glm::distance(centre, point);
     return distance < radius;
 }
-bool PointInRectCheck(glm::vec3 origin, float length, float breadth, glm::vec3 point)
+bool PointInRectCheck(Rect rect, glm::vec3 point)
 {
     //xbounds
-    bool isWithinX = point.x > origin.x && point.x < (origin.x + length);
+    bool isWithinX = point.x > rect.origin.x && point.x < (rect.origin.x + rect.length);
     //ybounds
-    bool isWithinY = point.y<origin.y && point.y >(origin.y - breadth);
+    bool isWithinY = point.y<rect.origin.y && point.y >(rect.origin.y - rect.breadth);
 
     return isWithinX && isWithinY;
 }
@@ -69,7 +67,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
         if (pointIndex != -1) //only allow selecting when point index unassigned
             return;
 
-        for (int i = 0;i < points.size();i++)
+        for (int i = 0;i < rectangles.size();i++)
         {
             //if (PointInCircleCheck(points[i], 0.2f, glm::vec3(worldX, worldY, 0.0f)))
             //{
@@ -77,9 +75,9 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
             //    //pick up
             //    pointIndex = i;
             //}
-            if (PointInRectCheck(origin, length, breadth, glm::vec3(worldX, worldY, 0.0f)))
+            if (PointInRectCheck(rectangles[i], glm::vec3(worldX, worldY, 0.0f)))
             {
-                pointIndex = 0;
+                pointIndex = i;
             }
         }
 
@@ -128,12 +126,12 @@ void DefineColor(glm::vec3 color)
 {
     glColor3f(color.x, color.y, color.z);
 }
-void DefineRect(glm::vec3 origin, float length, float breadth)
+void DefineRect(Rect rect)
 {
-    DrawVertex(origin);//1
-    DrawVertex(glm::vec3(origin.x + length, origin.y, 0.0f));//2
-    DrawVertex(glm::vec3(origin.x + length, origin.y - breadth, 0.0f));//3
-    DrawVertex(glm::vec3(origin.x, origin.y - breadth, 0.0f));//4
+    glVertex3f(rect.origin.x, rect.origin.y,0.0f);//1
+    glVertex3f(rect.origin.x + rect.length, rect.origin.y, 0.0f);//2
+    glVertex3f(rect.origin.x + rect.length, rect.origin.y - rect.breadth, 0.0f);//3
+    glVertex3f(rect.origin.x, rect.origin.y - rect.breadth, 0.0f);//4
 }
 void DefineCircle(glm::vec3 centre, float radius)
 {
@@ -190,8 +188,11 @@ int main(void)
 #pragma region RenderLoop
 
 
-    points.push_back(glm::vec3(0.0f));
-    points.push_back(glm::vec3(0.5f, 0.0f, 0.0f));
+    Rect r1(glm::vec3(-0.5f, 0.5f, 0.0f), 0.5f, 0.5f, orangeColor);
+    Rect r2(glm::vec3(0.5f, 0.5f, 0.0f), 0.5f, 0.5f, redColor);
+
+    rectangles.push_back(r1);
+    rectangles.push_back(r2);
 
     float radius = 0.5f;
     std::cout << "starting game loop - basic shapes" << std::endl;
@@ -209,7 +210,7 @@ int main(void)
             /*Log("left click held");*/
             if (pointIndex != -1)
             {
-                origin = glm::vec3(worldX, worldY, 0.0f);
+                rectangles[pointIndex].origin = glm::vec3(worldX, worldY, 0.0f);
             }
         }
 
@@ -217,15 +218,22 @@ int main(void)
         glLineWidth(5.0f);
         glPointSize(10.0f);
 
-        DefineColor(parrotGreenColor);
-
-
-        glLineWidth(5.0f);
         glBegin(GL_QUADS);
 
-        DefineRect(origin, length, breadth);
+        DefineRect(r1);
 
         glEnd();
+
+        glBegin(GL_QUADS);
+
+        DefineRect(r2);
+
+        glEnd();
+        /*for (int i = 0;i < rectangles.size();i++)
+        {
+            DefineColor(rectangles[i].color);
+            
+        }*/
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
