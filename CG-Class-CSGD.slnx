@@ -9,4 +9,5 @@
   <Project Path="LineRenderer/LineRenderer.vcxproj" Id="b4172839-18de-44d4-892b-2c8c2184f1f6" />
   <Project Path="Quads/Quads.vcxproj" Id="8524ae35-cef3-4efe-a5c3-27a2204da5c5" />
   <Project Path="RectDrag/RectDrag.vcxproj" Id="bfb0a8b4-bb14-429c-909c-256773525a13" />
+  <Project Path="Shader Setup/Shader Setup.vcxproj" Id="bf111af1-9eef-4e53-8d52-c779d7667f1a" />
 </Solution>

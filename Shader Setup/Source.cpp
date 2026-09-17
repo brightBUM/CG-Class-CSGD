@@ -3,7 +3,6 @@
 #include<iostream>  
 #include<glm/glm.hpp>
 #include<vector>
-#include"Rect.hpp"
 
 #define Width 800
 #define Height 800
@@ -28,24 +27,10 @@ glm::vec3 parrotGreenColor = glm::vec3(0.267f, 0.902f, 0.271f);
 glm::vec3 blueColor = glm::vec3(0.0f, 0.0f, 11.0f);
 double worldX, worldY;
 std::vector<glm::vec3> points;
-std::vector<Rect> rectangles;
 #pragma endregion
 
 #pragma region FwdDeclaration
-bool PointInCircleCheck(glm::vec3 centre, float radius, glm::vec3 point)
-{
-    auto distance = glm::distance(centre, point);
-    return distance < radius;
-}
-bool PointInRectCheck(Rect rect, glm::vec3 point)
-{
-    //xbounds
-    bool isWithinX = point.x > rect.origin.x && point.x < (rect.origin.x + rect.length);
-    //ybounds
-    bool isWithinY = point.y<rect.origin.y && point.y >(rect.origin.y - rect.breadth);
 
-    return isWithinX && isWithinY;
-}
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     //Log("mouse screen pos : " << xpos << " , "<<ypos);
@@ -56,39 +41,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-    {
-        Log("right mouse pressed");
-        Log("mouse world pos : " << worldX << " , " << worldY);
-        points.push_back(glm::vec3(worldX, worldY, 0.0f));
-    }
-    if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_PRESS))
-    {
-        if (pointIndex != -1) //only allow selecting when point index unassigned
-            return;
-
-        for (int i = 0;i < rectangles.size();i++)
-        {
-            //if (PointInCircleCheck(points[i], 0.2f, glm::vec3(worldX, worldY, 0.0f)))
-            //{
-            //    //cursor in range of this point 
-            //    //pick up
-            //    pointIndex = i;
-            //}
-            if (PointInRectCheck(rectangles[i], glm::vec3(worldX, worldY, 0.0f)))
-            {
-                pointIndex = i;
-            }
-        }
-
-
-    }
-    if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_RELEASE))
-    {
-        pointIndex = -1;
-        //-1 meaning free to select new point
-
-    }
+    
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -118,32 +71,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
-void DrawVertex(glm::vec3 point)
-{
-    glVertex3f(point.x, point.y, point.z);
-}
-void DefineColor(glm::vec3 color)
-{
-    glColor3f(color.x, color.y, color.z);
-}
-void DefineRect(Rect rect)
-{
-    glVertex3f(rect.origin.x, rect.origin.y,0.0f);//1
-    glVertex3f(rect.origin.x + rect.length, rect.origin.y, 0.0f);//2
-    glVertex3f(rect.origin.x + rect.length, rect.origin.y - rect.breadth, 0.0f);//3
-    glVertex3f(rect.origin.x, rect.origin.y - rect.breadth, 0.0f);//4
-}
-void DefineCircle(glm::vec3 centre, float radius)
-{
-    glVertex3f(0.0f, 0.0f, 0.0f); // 1
-    angleinDegrees = 0;
-    for (int i = 0;i <= 360;i += 15)
-    {
-        angleinDegrees = i;
-        glVertex3f(radius * cos(angleinDegrees * Deg2Rad), radius * sin(angleinDegrees * Deg2Rad), 0.0f); // 1
 
-    }
-}
 
 #pragma endregion
 
@@ -184,15 +112,30 @@ int main(void)
         return -1;
     }
 #pragma endregion
+#pragma region ShaderSetup
+    float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+    };
+
+    //VBO - vertex buffer object
+    // VAO - vertex attribute object
+    //binding = selecting
+    unsigned int VBO,VAO;
+    glGenBuffers(1, &VBO);  
+    glGenVertexArrays(1, &VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+#pragma endregion
+
 
 #pragma region RenderLoop
 
-
-    Rect r1(glm::vec3(-0.5f, 0.5f, 0.0f), 0.5f, 0.5f, orangeColor);
-    Rect r2(glm::vec3(0.5f, 0.5f, 0.0f), 0.5f, 0.5f, redColor);
-
-    rectangles.push_back(r1);
-    rectangles.push_back(r2);
 
     float radius = 0.5f;
     std::cout << "starting game loop - basic shapes" << std::endl;
@@ -205,28 +148,8 @@ int main(void)
 
 
         //input code
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1))
-        {
-            /*Log("left click held");*/
-            if (pointIndex != -1)
-            {
-                rectangles[pointIndex].origin = glm::vec3(worldX, worldY, 0.0f);
-            }
-        }
 
-        //rendering code
-        glLineWidth(5.0f);
-        glPointSize(10.0f);
-        //DefineColor(redColor);
-
-        for (int i = 0;i < rectangles.size();i++)
-        {
-            glBegin(GL_QUADS);
-            DefineColor(rectangles[i].color);
-            DefineRect(rectangles[i]);
-            glEnd();
-
-        }
+        
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
