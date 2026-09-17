@@ -3,7 +3,7 @@
 #include<iostream>  
 #include<glm/glm.hpp>
 #include<vector>
-
+#include"Shader.h"
 #define Width 800
 #define Height 800
 #define Gravity -9.8f
@@ -131,6 +131,8 @@ int main(void)
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    Shader defaultShader("", "");
 #pragma endregion
 
 
