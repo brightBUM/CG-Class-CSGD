@@ -25,6 +25,7 @@ glm::vec3 orangeColor = glm::vec3(1.0f, 0.5f, 0.0f);
 glm::vec3 whiteColor = glm::vec3(1.0f, 1.0f, 1.0f);
 glm::vec3 parrotGreenColor = glm::vec3(0.267f, 0.902f, 0.271f);
 glm::vec3 blueColor = glm::vec3(0.0f, 0.0f, 11.0f);
+
 double worldX, worldY;
 std::vector<glm::vec3> points;
 #pragma endregion
@@ -112,6 +113,7 @@ int main(void)
         return -1;
     }
 #pragma endregion
+
 #pragma region ShaderSetup
     float vertices[] = {
     -0.5f, -0.5f, 0.0f,
@@ -132,7 +134,7 @@ int main(void)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    Shader defaultShader("", "");
+    Shader defaultShader("Resources/Shaders/default.vert", "Resources/Shaders/default.frag");
 #pragma endregion
 
 
@@ -148,9 +150,8 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(red, green, blue, 1.0f);
 
-
-        //input code
-
+        defaultShader.use();
+        glDrawArrays(GL_TRIANGLES, 0, 3);
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
