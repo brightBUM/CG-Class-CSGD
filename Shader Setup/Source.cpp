@@ -114,12 +114,17 @@ int main(void)
     }
 #pragma endregion
 
+    //triangle winding order - clockwise /anti clockwise point orientation
 #pragma region ShaderSetup
-    float vertices[] = {
+    float vertices[] = {   
     //pos               //col
-    -0.5f, -0.5f, 0.0f, 1.0f,0.0f,0.0f,
-     0.5f, -0.5f, 0.0f, 0.0f,1.0f,0.0f,
-     0.0f,  0.5f, 0.0f, 0.0f,0.0f,1.0f
+    -0.5f, -0.5f, 0.0f,  1.0f,1.0f,0.0f, //1
+     0.5f, -0.5f, 0.0f,  1.0f,1.0f,0.0f, //2
+     -0.5f,  0.5f, 0.0f, 1.0f,1.0f,0.0f,//3
+
+     0.5f,  -0.5f, 0.0f, 0.0f,1.0f,0.3f, //2 
+     0.5f,  0.5f, 0.0f,  0.0f,1.0f,0.3f,  //4
+     -0.5f,  0.5f, 0.0f, 0.0f,1.0f,0.3f //3
     };
 
     //VBO - vertex buffer object
@@ -161,11 +166,11 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
         glClearColor(red, green, blue, 1.0f);
 
-        Log("time : "<< glfwGetTime());
+        //Log("time : "<< glfwGetTime());
 
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
         
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
