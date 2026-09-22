@@ -117,10 +117,11 @@ int main(void)
     //triangle winding order - clockwise /anti clockwise point orientation
 #pragma region ShaderSetup
     float vertices[] = {
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left 
+        //pos              //col
+       0.5f,  0.5f, 0.0f,  1.0f,0.0f,0.0f,  // top right
+       0.5f, -0.5f, 0.0f,  0.0f,1.0f,0.0f,  // bottom right
+      -0.5f, -0.5f, 0.0f,  1.0f,1.0f,1.0f,  // bottom left
+      -0.5f,  0.5f, 0.0f,  0.0f,0.0f,1.0f  // top left 
     };
     unsigned int indices[] = {  // note that we start from 0!
         0, 1, 3,   // first triangle
@@ -150,19 +151,20 @@ int main(void)
     //6 - offset within the vertex
     
     //pos
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     //col
-    /*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);*/
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     Shader defaultShader("Resources/Shaders/default.vert", "Resources/Shaders/default.frag");
 #pragma endregion
 
 
 #pragma region RenderLoop
-
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPointSize(8.0f);
+    /*glLineWidth(8.0f);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
     float radius = 0.5f;
     std::cout << "starting game loop - basic shapes" << std::endl;
     /* Loop until the user closes the window */
