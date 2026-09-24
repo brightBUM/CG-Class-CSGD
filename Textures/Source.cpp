@@ -4,6 +4,7 @@
 #include<glm/glm.hpp>
 #include<vector>
 #include"Shader.h"
+#include"Common_Lib.h"
 #define Width 800
 #define Height 800
 #define Gravity -9.8f
@@ -42,7 +43,6 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -128,15 +128,15 @@ int main(void)
     unsigned int indices[] = {  // note that we start from 0!
         0, 1, 3,   // first triangle
         1, 2, 3,   // second triangle
-        0, 3, 4    
+        0, 3, 4
     };
 
     //VBO - vertex buffer object
     // VAO - vertex attribute object
     // EBO - element buffer object (element/index)
     //binding = selecting
-    unsigned int VBO,VAO,EBO;
-    glGenBuffers(1, &VBO);  
+    unsigned int VBO, VAO, EBO;
+    glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &EBO);
 
@@ -152,7 +152,7 @@ int main(void)
     //2 - size of the attribute
     //5-  total size of vertex
     //6 - offset within the vertex
-    
+
     //pos
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -177,7 +177,7 @@ int main(void)
         glClearColor(red, green, blue, 1.0f);
 
         //Log("time : "<< glfwGetTime());
-
+        
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
         //glDrawArrays(GL_TRIANGLES, 0, 6);

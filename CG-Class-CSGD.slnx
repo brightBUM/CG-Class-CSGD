@@ -5,9 +5,11 @@
   </Configurations>
   <Project Path="Basic Shapes/Basic Shapes.vcxproj" Id="ea424940-3cf6-4b83-adc6-16301ca0e2a1" />
   <Project Path="CG-Class-CSGD/CG-Class-CSGD.vcxproj" Id="fdd9e15a-69ad-47af-a75c-f0a12ffaee42" />
+  <Project Path="Common_Lib/Common_Lib.vcxproj" Id="8b5abb2a-9e24-4239-853c-915c0decc641" />
   <Project Path="Flags/Flags.vcxproj" Id="de1daca0-bdc1-4a4e-990a-1ed6cf6ee586" />
   <Project Path="LineRenderer/LineRenderer.vcxproj" Id="b4172839-18de-44d4-892b-2c8c2184f1f6" />
   <Project Path="Quads/Quads.vcxproj" Id="8524ae35-cef3-4efe-a5c3-27a2204da5c5" />
   <Project Path="RectDrag/RectDrag.vcxproj" Id="bfb0a8b4-bb14-429c-909c-256773525a13" />
   <Project Path="Shader Setup/Shader Setup.vcxproj" Id="bf111af1-9eef-4e53-8d52-c779d7667f1a" />
+  <Project Path="Textures/Textures.vcxproj" Id="7f81ee96-9579-4560-bf13-e20d079a137b" />
 </Solution>
