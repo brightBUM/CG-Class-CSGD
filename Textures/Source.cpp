@@ -4,7 +4,11 @@
 #include<glm/glm.hpp>
 #include<vector>
 #include"Shader.h"
-#include"Common_Lib.h"
+#include"Common_Lib.h"\
+
+#define STB_IMAGE_IMPLEMENTATION
+#include<stb_image.h>
+
 #define Width 800
 #define Height 800
 #define Gravity -9.8f
@@ -75,7 +79,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 
 #pragma endregion
-
+  
 
 int main(void)
 {
@@ -112,23 +116,21 @@ int main(void)
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-#pragma endregion
 
-#pragma region ShaderSetup
+    stbi_set_flip_vertically_on_load(true);
+
     //triangle winding order - clockwise /anti clockwise point orientation
 
     float vertices[] = {
-        //pos              //col
-       0.5f,  0.5f, 0.0f,  1.0f,0.0f,0.0f,  // top right - 0 
-       0.5f, -0.5f, 0.0f,  0.0f,1.0f,0.0f,  // bottom right - 1
-      -0.5f, -0.5f, 0.0f,  1.0f,1.0f,1.0f,  // bottom left - 2
-      -0.5f,  0.5f, 0.0f,  0.0f,0.0f,1.0f,  // top left - 3
-       0.0f,  0.75f, 0.0f,  1.0f,0.0f,1.0f  // top centre - 4
+        //pos              //col            //texCoords - (u,v)  or (s,t)
+       0.5f,  0.5f, 0.0f,  1.0f,0.0f,0.0f,  1.0f,1.0f,  // top right - 0 
+       0.5f, -0.5f, 0.0f,  0.0f,1.0f,0.0f,  1.0f,0.0f,  // bottom right - 1
+      -0.5f, -0.5f, 0.0f,  1.0f,1.0f,1.0f,  0.0f,0.0f,  // bottom left - 2
+      -0.5f,  0.5f, 0.0f,  0.0f,0.0f,1.0f,  0.0f,1.0f,  // top left - 3
     };
     unsigned int indices[] = {  // note that we start from 0!
         0, 1, 3,   // first triangle
         1, 2, 3,   // second triangle
-        0, 3, 4
     };
 
     //VBO - vertex buffer object
@@ -154,15 +156,46 @@ int main(void)
     //6 - offset within the vertex
 
     //pos
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
     //col
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+    //texcoord
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     Shader defaultShader("Resources/Shaders/default.vert", "Resources/Shaders/default.frag");
 #pragma endregion
 
+    //texture loading 
+    int width, height, nrChannels;
+    const char* path = "Resources/Textures/windmill_flat_1.png";
+
+    unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+    Log("nrChannels in texture : "<<nrChannels);
+    //generating texture object
+    unsigned int texture;
+    glGenTextures(1, &texture);
+
+    //selecting/binding the current texture
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    //creating the 2D texture and passing the data into it 
+    if (data)
+    {
+        Log("Loaded Texture : " << path);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        Log("Failed to Load Texture : " << path);
+
+    }
+
+    //unloading the data object;
+    stbi_image_free(data);
 #pragma region RenderLoop
     //glPointSize(8.0f);
     /*glLineWidth(8.0f);
@@ -180,6 +213,7 @@ int main(void)
         
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
+        //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);

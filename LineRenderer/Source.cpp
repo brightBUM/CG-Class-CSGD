@@ -46,35 +46,35 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-    {
-        Log("right mouse pressed");
-        Log("mouse world pos : " << worldX << " , " << worldY);
-        points.push_back(glm::vec3(worldX, worldY, 0.0f));
-    }
-    if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_PRESS))
-    {
-        if (pointIndex != -1)
-            return;
+    //if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+    //{
+    //    Log("right mouse pressed");
+    //    Log("mouse world pos : " << worldX << " , " << worldY);
+    //    points.push_back(glm::vec3(worldX, worldY, 0.0f));
+    //}
+    //if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_PRESS))
+    //{
+    //    if (pointIndex != -1)
+    //        return;
 
-        for (int i = 0;i < points.size();i++)
-        {
-            if (PointInCircleCheck(points[i], 0.2f, glm::vec3(worldX, worldY, 0.0f)))
-            {
-                //cursor in range of this point 
-                //pick up
-                pointIndex = i;
-            }
-        }
-        
-        
-    }
-    if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_RELEASE))
-    {
-        pointIndex = -1;
-        //-1 meaning free to select new point
+    //    for (int i = 0;i < points.size();i++)
+    //    {
+    //        if (PointInCircleCheck(points[i], 0.2f, glm::vec3(worldX, worldY, 0.0f)))
+    //        {
+    //            //cursor in range of this point 
+    //            //pick up
+    //            pointIndex = i;
+    //        }
+    //    }
+    //    
+    //    
+    //}
+    //if (button == GLFW_MOUSE_BUTTON_LEFT && (action == GLFW_RELEASE))
+    //{
+    //    pointIndex = -1;
+    //    //-1 meaning free to select new point
 
-    }
+    //}
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
