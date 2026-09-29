@@ -4,10 +4,11 @@
 #include<glm/glm.hpp>
 #include<vector>
 #include"Shader.h"
-#include"Common_Lib.h"\
+#include"Common_Lib.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include<stb_image.h>
+#include "Source.h"
 
 #define Width 800
 #define Height 800
@@ -76,10 +77,49 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
+void LoadTexture(unsigned int& texture, const char* path)
+{
+    int width, height, nrChannels;
 
+    unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
+    Log("nrChannels in texture : " << nrChannels);
+    //generating texture object
+    glGenTextures(1, &texture);
+
+    //selecting/binding the current texture
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //creating the 2D texture and passing the data into it 
+    if (data)
+    {
+        Log("Loaded Texture : " << path);
+        switch (nrChannels)
+        {
+        case 3:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            break;
+        case 4:
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            break;
+        default:
+            break;
+        }
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        Log("Failed to Load Texture : " << path);
+
+    }
+
+   
+    //unloading the data object;
+    stbi_image_free(data);
+}
 
 #pragma endregion
-  
+
 
 int main(void)
 {
@@ -118,6 +158,11 @@ int main(void)
     }
 
     stbi_set_flip_vertically_on_load(true);
+#pragma endregion
+
+#pragma region ShaderSetup
+
+
 
     //triangle winding order - clockwise /anti clockwise point orientation
 
@@ -168,34 +213,13 @@ int main(void)
     Shader defaultShader("Resources/Shaders/default.vert", "Resources/Shaders/default.frag");
 #pragma endregion
 
-    //texture loading 
-    int width, height, nrChannels;
-    const char* path = "Resources/Textures/windmill_flat_1.png";
-
-    unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
-    Log("nrChannels in texture : "<<nrChannels);
-    //generating texture object
+    //texture loading
     unsigned int texture;
-    glGenTextures(1, &texture);
 
-    //selecting/binding the current texture
-    glBindTexture(GL_TEXTURE_2D, texture);
+    LoadTexture(texture, "Resources/Textures/cat_close.png");
+    /*glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);*/
 
-    //creating the 2D texture and passing the data into it 
-    if (data)
-    {
-        Log("Loaded Texture : " << path);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        Log("Failed to Load Texture : " << path);
-
-    }
-
-    //unloading the data object;
-    stbi_image_free(data);
 #pragma region RenderLoop
     //glPointSize(8.0f);
     /*glLineWidth(8.0f);

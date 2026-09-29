@@ -152,6 +152,9 @@
     <None Include="Resources\Shaders\default.frag" />
     <None Include="Resources\Shaders\default.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

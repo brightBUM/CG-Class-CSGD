@@ -14,6 +14,6 @@ void main()
     //texutures - 2nd params - texture co ordinates
     vec4 texValue = texture(texSampler,TexCoords);
 //    vec3 objectColor = vec3(0.5f,1.0f,0.0f);
-    FragColor = vec4(texValue);
+    FragColor = vec4(texValue.rgb*Color,1.0f);
     
 } 
