@@ -24,6 +24,7 @@ const float Deg2Rad = 0.01745f;
 float red, green, blue;
 bool flipColor;
 float angleinDegrees = 0.0f;
+float mixValue = 0.0f;
 int pointIndex = -1;
 
 glm::vec3 redColor = glm::vec3(1.0f, 0.0f, 0.0f);  // 0 to 1
@@ -55,22 +56,28 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
         //std::cout << "space key pressed" << std::endl;
-        flipColor = !flipColor;
-        if (flipColor)
-        {
-            //color 1
-            red = 0.451f;
-            green = 0.608f;
-            blue = 0.702f;
-        }
-        else
-        {
-            //color 2
-            red = 0.78f;
-            green = 0.765f;
-            blue = 0.314f;
-        }
+        //flipColor = !flipColor;
+        //if (flipColor)
+        //{
+        //    //color 1
+        //    red = 0.451f;
+        //    green = 0.608f;
+        //    blue = 0.702f;
 
+        //}
+        //else
+        //{
+        //    //color 2
+        //    red = 0.78f;
+        //    green = 0.765f;
+        //    blue = 0.314f;
+        //}
+
+        mixValue = mixValue == 1 ? 0 : 1;
+
+       /* mixValue += 0.1f;
+        if (mixValue > 1.0f)
+            mixValue = 0.0f;*/
     }
 }
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -229,8 +236,9 @@ int main(void)
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, texture_1);
-    /*glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);*/
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 #pragma region RenderLoop
     //glPointSize(8.0f);
@@ -251,6 +259,8 @@ int main(void)
 
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
+        defaultShader.SetFloat("mixValue",mixValue);
+
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
