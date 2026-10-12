@@ -88,6 +88,7 @@ void LoadTexture(unsigned int& texture, const char* path)
 
     //selecting/binding the current texture
     glBindTexture(GL_TEXTURE_2D, texture);
+    //wrap settings 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     //creating the 2D texture and passing the data into it 
@@ -214,9 +215,20 @@ int main(void)
 #pragma endregion
 
     //texture loading
-    unsigned int texture;
+    unsigned int texture_0,texture_1;
 
-    LoadTexture(texture, "Resources/Textures/cat_close.png");
+    LoadTexture(texture_0, "Resources/Textures/cat_close.png");
+    LoadTexture(texture_1, "Resources/Textures/cat_open.png");
+
+    defaultShader.use();
+    defaultShader.SetInt("texSampler_0", 0);
+    defaultShader.SetInt("texSampler_1", 1);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture_0);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_1);
     /*glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);*/
 
@@ -234,13 +246,18 @@ int main(void)
         glClearColor(red, green, blue, 1.0f);
 
         //Log("time : "<< glfwGetTime());
+
         
+
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        
+
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 

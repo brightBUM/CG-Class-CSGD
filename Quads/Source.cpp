@@ -5,8 +5,7 @@
 #include"Shader.h"
 #define Width 800
 #define Height 800
-#define Gravity -9.8f
-#define PI 3.14
+
 #define Log(x) std::cout<<x<<std::endl;
 
 
@@ -106,9 +105,6 @@ int main(void)
 
     float radius = 0.5f;
     //glPolygonMode(GL_FRONT, GL_LINE);
-    Log("gravity value = "<<Gravity);
-    Log("Radian to degree "<<Rad2Deg);
-    Log("redColor =  "<<red);
 
     std::cout << "starting game loop - basic shapes" << std::endl;
     /* Loop until the user closes the window */
