@@ -13,10 +13,14 @@ void main()
 {
     //textures - 1st params - texture object id via a sampler2D
     //texutures - 2nd params - texture co ordinates
-    vec4 texValue_0 = texture(texSampler_0,3.0f*TexCoords);
-    vec4 texValue_1 = texture(texSampler_1,3.0f*TexCoords);
+    vec2 uv = TexCoords;
+
+    uv.x -= sin(time)*0.5f;
+
+    vec4 texValue_0 = texture(texSampler_0,3.0f*uv);
+    vec4 texValue_1 = texture(texSampler_1,3.0f*uv);
 //    vec3 objectColor = vec3(0.5f,1.0f,0.0f);
-    FragColor = mix(texValue_0,texValue_1,mixValue); 
-//    FragColor = vec4(texValue_1.rgb,1.0f);
+    vec4 mixValue = mix(texValue_0,texValue_1,mixValue); 
+    FragColor = mixValue;
     
 } 

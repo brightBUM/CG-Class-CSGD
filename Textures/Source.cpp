@@ -164,7 +164,7 @@ int main(void)
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
+    glfwSwapInterval(1);
     stbi_set_flip_vertically_on_load(true);
 #pragma endregion
 
@@ -246,6 +246,12 @@ int main(void)
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
     float radius = 0.5f;
     std::cout << "starting game loop - basic shapes" << std::endl;
+
+    //fps
+    double currentFrameTime =0.0f, prevFrameTime = 0.0f;
+    double delta;
+    int frameCounter =0;
+    float timer=0.0f;
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
@@ -254,8 +260,19 @@ int main(void)
         glClearColor(red, green, blue, 1.0f);
 
         //Log("time : "<< glfwGetTime());
+        prevFrameTime = currentFrameTime;
+        currentFrameTime = glfwGetTime();
+        delta = currentFrameTime - prevFrameTime;
+        frameCounter++;
+        timer += delta;
+        if (timer >= 1.0f)
+        {
+            Log("fps : " << frameCounter);
 
-        
+            frameCounter = 0;
+            timer = 0;
+        }
+
 
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
@@ -263,8 +280,6 @@ int main(void)
 
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
