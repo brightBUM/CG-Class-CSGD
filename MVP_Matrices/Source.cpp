@@ -273,6 +273,9 @@ int main(void)
         view = glm::translate(view, glm::vec3(0.0f, 0.0f, xPos));
         //view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
+        glm::mat4 proj = glm::mat4(1.0f);
+        proj = glm::perspective(glm::radians(45.0f), (float)Width / (float)Height, 0.1f, 100.0f);
+
         //orange square
         glm::mat4 model = glm::mat4(1.0f); //identity matrix
         model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
@@ -284,6 +287,7 @@ int main(void)
         defaultShader.SetFloat("mixValue", mixValue);
         defaultShader.SetMat4("model", model);
         defaultShader.SetMat4("view", view);
+        defaultShader.SetMat4("proj", proj);
         defaultShader.SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.0f));
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -303,6 +307,7 @@ int main(void)
         defaultShader.SetFloat("mixValue", mixValue);
         defaultShader.SetMat4("model", model);
         defaultShader.SetMat4("view", view);
+        defaultShader.SetMat4("proj", proj);
         defaultShader.SetVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
