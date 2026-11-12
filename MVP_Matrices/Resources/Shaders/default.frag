@@ -6,11 +6,12 @@ uniform float time;
 uniform sampler2D texSampler_0;
 uniform sampler2D texSampler_1;
 uniform float mixValue;
+uniform vec3 objectColor;
 in vec3 Color;
 in vec2 TexCoords;
 
 void main()
 {
-    FragColor = vec4(1.0,0.5f,0.0f,1.0f);
+    FragColor = vec4(objectColor,1.0f);
     
 } 

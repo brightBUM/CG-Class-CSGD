@@ -33,6 +33,7 @@ glm::vec3 parrotGreenColor = glm::vec3(0.267f, 0.902f, 0.271f);
 glm::vec3 blueColor = glm::vec3(0.0f, 0.0f, 11.0f);
 
 double worldX, worldY;
+float xPos = 0.0f;
 std::vector<glm::vec3> points;
 #pragma endregion
 
@@ -77,6 +78,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         /* mixValue += 0.1f;
          if (mixValue > 1.0f)
              mixValue = 0.0f;*/
+    }
+
+    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+    {
+        xPos -= 0.1f;
+    }
+    if (key == GLFW_KEY_D && action == GLFW_PRESS)
+    {
+        xPos += 0.1f;
+
     }
 }
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -256,16 +267,37 @@ int main(void)
 
         //Log("time : "<< glfwGetTime());
         Utility::FPSCounter(window);
+        //view matrix
 
+        //orange square
         glm::mat4 model = glm::mat4(1.0f); //identity matrix
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::translate(model, glm::vec3(xPos, 0.0f, 0.0f));
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
 
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
         defaultShader.SetFloat("mixValue", mixValue);
         defaultShader.SetMat4("model", model);
+        defaultShader.SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.0f));
+        //defaultShader.SetVec3
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+
+        //white square
+        model = glm::mat4(1.0f); //identity matrix
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, glm::vec3(0.25f, 0.25f, 1.0f));
+
+        defaultShader.use();
+        defaultShader.SetFloat("time", (float)glfwGetTime());
+        defaultShader.SetFloat("mixValue", mixValue);
+        defaultShader.SetMat4("model", model);
+        defaultShader.SetVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
