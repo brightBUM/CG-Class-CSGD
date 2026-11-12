@@ -83,11 +83,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_A && action == GLFW_PRESS)
     {
         xPos -= 0.1f;
+        Log("z value : " << xPos);
     }
     if (key == GLFW_KEY_D && action == GLFW_PRESS)
     {
         xPos += 0.1f;
-
+        Log("z value : " << xPos);
     }
 }
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -268,17 +269,21 @@ int main(void)
         //Log("time : "<< glfwGetTime());
         Utility::FPSCounter(window);
         //view matrix
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, xPos));
+        //view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
         //orange square
         glm::mat4 model = glm::mat4(1.0f); //identity matrix
-        model = glm::translate(model, glm::vec3(xPos, 0.0f, 0.0f));
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, glm::vec3(0.5f, 0.5f, 1.0f));
 
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
         defaultShader.SetFloat("mixValue", mixValue);
         defaultShader.SetMat4("model", model);
+        defaultShader.SetMat4("view", view);
         defaultShader.SetVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.0f));
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -297,6 +302,7 @@ int main(void)
         defaultShader.SetFloat("time", (float)glfwGetTime());
         defaultShader.SetFloat("mixValue", mixValue);
         defaultShader.SetMat4("model", model);
+        defaultShader.SetMat4("view", view);
         defaultShader.SetVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
