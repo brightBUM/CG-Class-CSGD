@@ -293,7 +293,7 @@ int main(void)
     //texture loading
     unsigned int texture_0, texture_1;
 
-    LoadTexture(texture_0, "Resources/Textures/brick.jpg");
+    LoadTexture(texture_0, "Resources/Textures/container2.png");
     LoadTexture(texture_1, "Resources/Textures/cat_open.png");
 
     defaultShader.use();
