@@ -5,6 +5,7 @@
 #include<vector>
 #include"Shader.h"
 #include"Common_Lib.h"
+#include"Camera.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include<stb_image.h>
@@ -35,6 +36,17 @@ glm::vec3 blueColor = glm::vec3(0.0f, 0.0f, 11.0f);
 double worldX, worldY;
 float xPos = -2.5f;
 std::vector<glm::vec3> points;
+
+double currentFrameTime = 0.0f;
+double prevFrameTime = 0.0f;
+double delta = 0.0f;
+int frameCounter = 0;
+float timer = 0.0f;
+
+//mouse
+glm::vec2 mousePrev = glm::vec2(0.0f);
+glm::vec2 mouseCurrent = glm::vec2(0.0f);
+glm::vec2 mouseDelta = glm::vec2(0.0f);
 #pragma endregion
 
 #pragma region FwdDeclaration
@@ -45,7 +57,11 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
     worldX = xpos / (double)Width * 2.0f - 1.0f;
     worldY = 1.0f - ypos / (double)Height * 2.0f;
 
+    mousePrev = mouseCurrent;
+    mouseCurrent = glm::vec2(xpos, ypos);
 
+    mouseDelta.x = mouseCurrent.x - mousePrev.x;
+    mouseDelta.y = mousePrev.y- mouseCurrent.y;
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
@@ -135,6 +151,22 @@ void LoadTexture(unsigned int& texture, const char* path)
 
     //unloading the data object;
     stbi_image_free(data);
+}
+void FPSCounter(GLFWwindow* window)
+{
+    prevFrameTime = currentFrameTime;
+    currentFrameTime = glfwGetTime();
+    delta = currentFrameTime - prevFrameTime;
+    frameCounter++;
+    timer += delta;
+    if (timer >= 1.0f)
+    {
+        std::string title = "CG Class | FPS : " +
+            std::to_string(frameCounter) + " | delta : " + std::to_string(delta);
+        glfwSetWindowTitle(window, title.c_str());
+        frameCounter = 0;
+        timer = 0;
+    }
 }
 
 #pragma endregion
@@ -290,6 +322,9 @@ int main(void)
     Shader defaultShader("Resources/Shaders/default.vert", "Resources/Shaders/default.frag");
 #pragma endregion
 
+#pragma region  TextureSetup
+
+
     //texture loading
     unsigned int texture_0, texture_1;
 
@@ -308,6 +343,9 @@ int main(void)
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+#pragma endregion
+
+    Camera cam(glm::vec3(0.0f), glm::vec3(0.0f,1.0f,0.0f), 0.0f, 0.0f);
 
 #pragma region RenderLoop
     //glPointSize(8.0f);
@@ -325,14 +363,49 @@ int main(void)
         glClearColor(red, green, blue, 1.0f);
 
         //Log("time : "<< glfwGetTime());
-        Utility::FPSCounter(window);
+        FPSCounter(window);
+
+        //camera inputs
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            cam.ProcessKeyboard(FORWARD, delta);
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            cam.ProcessKeyboard(BACKWARD, delta);
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            cam.ProcessKeyboard(LEFT, delta);
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            cam.ProcessKeyboard(RIGHT, delta);
+        }
+        if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        {
+            cam.ProcessKeyboard(DOWN, delta);
+        }
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        {
+            cam.ProcessKeyboard(UP, delta);
+        }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
+        {
+            cam.ProcessMouseMovement(mouseDelta.x, mouseDelta.y);
+        }
+        
+        
+
         //view matrix
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, xPos));
+        glm::mat4 view = cam.GetViewMatrix();
         //view = glm::rotate(view, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
 
         glm::mat4 proj = glm::mat4(1.0f);
         proj = glm::perspective(glm::radians(45.0f), (float)Width / (float)Height, 0.1f, 100.0f);
+
+
+
 
         //orange square
         glm::mat4 model = glm::mat4(1.0f); //identity matrix
