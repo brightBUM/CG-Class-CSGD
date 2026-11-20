@@ -8,6 +8,7 @@
   <Project Path="Common_Lib/Common_Lib.vcxproj" Id="8b5abb2a-9e24-4239-853c-915c0decc641" />
   <Project Path="CubeRendering/CubeRendering.vcxproj" Id="77d7c178-8de7-4a77-9009-c72efeac67a0" />
   <Project Path="Flags/Flags.vcxproj" Id="de1daca0-bdc1-4a4e-990a-1ed6cf6ee586" />
+  <Project Path="Lighting Models/Lighting Models.vcxproj" Id="f269f9e6-27fb-4842-813c-fd3500cb78bb" />
   <Project Path="LineRenderer/LineRenderer.vcxproj" Id="b4172839-18de-44d4-892b-2c8c2184f1f6" />
   <Project Path="MVP_Matrices/MVP_Matrices.vcxproj" Id="7c3966e2-044a-4459-b63e-5e4600f9b432" />
   <Project Path="Quads/Quads.vcxproj" Id="8524ae35-cef3-4efe-a5c3-27a2204da5c5" />

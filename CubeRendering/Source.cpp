@@ -57,11 +57,8 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
     worldX = xpos / (double)Width * 2.0f - 1.0f;
     worldY = 1.0f - ypos / (double)Height * 2.0f;
 
-    mousePrev = mouseCurrent;
-    mouseCurrent = glm::vec2(xpos, ypos);
+    mouseCurrent = glm::vec2(worldX, worldY);
 
-    mouseDelta.x = mouseCurrent.x - mousePrev.x;
-    mouseDelta.y = mousePrev.y- mouseCurrent.y;
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
@@ -390,6 +387,13 @@ int main(void)
         {
             cam.ProcessKeyboard(UP, delta);
         }
+
+        
+        mouseDelta.x = mouseCurrent.x - mousePrev.x;
+        mouseDelta.y = mousePrev.y - mouseCurrent.y;
+
+        mousePrev = mouseCurrent;
+
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
         {
             cam.ProcessMouseMovement(mouseDelta.x, mouseDelta.y);
