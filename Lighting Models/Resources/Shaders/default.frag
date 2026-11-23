@@ -6,9 +6,9 @@ uniform float time;
 uniform sampler2D texSampler_0;
 uniform sampler2D texSampler_1;
 uniform float mixValue;
-uniform vec3 objectColor;
 in vec2 TexCoords;
 in vec3 Normal;
+in vec3 FragPos;
 
 uniform float ambientValue;
 uniform vec3 lightPos;
@@ -22,6 +22,14 @@ void main()
     //ambient light 
     vec3 ambient = lightCol*ambientValue;
 
-    FragColor = vec4(ambient,1.0f);
+    //diffuse light  - dot product b/w normal and lightDir
+    vec3 A = normalize(Normal);
+    vec3 B = normalize(lightPos-FragPos);
+
+    float dotValue = dot(A,B);
+    float diffuseValue = max(dotValue,0.0f);
+    vec3 diffuse = diffuseValue*lightCol;
+
+    FragColor = vec4(ambient+diffuse,1.0f);
     
 } 

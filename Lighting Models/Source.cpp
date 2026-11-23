@@ -470,7 +470,6 @@ int main(void)
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     float radius = 0.5f;
     std::cout << "starting game loop - basic shapes" << std::endl;
-
     glEnable(GL_DEPTH_TEST);
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -496,9 +495,9 @@ int main(void)
 
         //cube render
         glm::mat4 model = glm::mat4(1.0f); //identity matrix
-        model = glm::translate(model, glm::vec3(-0.5f, 0.0f, 0.0f));
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
-        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(1.0f));
 
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
@@ -507,7 +506,6 @@ int main(void)
         defaultShader.SetMat4("model", model);
         defaultShader.SetMat4("view", view);
         defaultShader.SetMat4("proj", proj);
-        defaultShader.SetVec3("objectColor", glm::vec3(1.0f));
         defaultShader.SetVec3("lightPos", lightPos);
         defaultShader.SetVec3("lightCol", lightCol);
         //defaultShader.SetVec3
