@@ -50,6 +50,7 @@ glm::vec2 mouseDelta = glm::vec2(0.0f);
 
 //light
 glm::vec3 lightPos;
+glm::vec3 lightCol = glm::vec3(1.0f,1.0f,0.0f);
 
 #pragma endregion
 
@@ -385,7 +386,7 @@ int main(void)
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices2), cubeVertices2, GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeIndices), cubeIndices, GL_STATIC_DRAW);
@@ -397,12 +398,16 @@ int main(void)
     //6 - offset within the vertex
 
     //pos
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    //texcoord
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    //normal
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    //texcoord
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
 #pragma endregion
 
@@ -498,10 +503,13 @@ int main(void)
         defaultShader.use();
         defaultShader.SetFloat("time", (float)glfwGetTime());
         defaultShader.SetFloat("mixValue", mixValue);
+        defaultShader.SetFloat("ambientValue", 0.15f);
         defaultShader.SetMat4("model", model);
         defaultShader.SetMat4("view", view);
         defaultShader.SetMat4("proj", proj);
         defaultShader.SetVec3("objectColor", glm::vec3(1.0f));
+        defaultShader.SetVec3("lightPos", lightPos);
+        defaultShader.SetVec3("lightCol", lightCol);
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -519,6 +527,7 @@ int main(void)
         lightShader.SetMat4("view", view);
         lightShader.SetMat4("proj", proj);
         lightShader.SetVec3("objectColor", glm::vec3(1.0f));
+        lightShader.SetVec3("lightCol", lightCol);
 
         glBindVertexArray(lightVAO);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);

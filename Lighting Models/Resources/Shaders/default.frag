@@ -8,10 +8,20 @@ uniform sampler2D texSampler_1;
 uniform float mixValue;
 uniform vec3 objectColor;
 in vec2 TexCoords;
+in vec3 Normal;
 
+uniform float ambientValue;
+uniform vec3 lightPos;
+uniform vec3 lightCol;
 void main()
 {
-    vec4 texValue = texture(texSampler_0,TexCoords);
-    FragColor = vec4(1.0f,0.5,0.0f,1.0f);
+    //    vec4 texValue = texture(texSampler_0,TexCoords);
+
+    //phong lighting = ambient +diffuse + specular
+
+    //ambient light 
+    vec3 ambient = lightCol*ambientValue;
+
+    FragColor = vec4(ambient,1.0f);
     
 } 
