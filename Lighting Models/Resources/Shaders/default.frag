@@ -15,22 +15,22 @@ uniform vec3 lightPos;
 uniform vec3 lightCol;
 void main()
 {
-    //    vec4 texValue = texture(texSampler_0,TexCoords);
+    vec4 texValue = texture(texSampler_0,TexCoords);
 
     //phong lighting = ambient +diffuse + specular
 
     //ambient light 
-    vec3 ambient = lightCol*ambientValue;
+    vec3 ambient = texValue.rgb*ambientValue*lightCol;
 
     //diffuse light  - dot product b/w normal and lightDir
     vec3 A = normalize(Normal);
     vec3 B = normalize(lightPos-FragPos);
 
-    float dotValue = dot(A,B);
+    float dotValue = dot(A,B); 
     float diffuseValue = max(dotValue,0.0f);
-    vec3 diffuse = diffuseValue*lightCol;
+    vec3 diffuse = diffuseValue*texValue.rgb*lightCol;
 
     //lambertian diffuse - ambient+diffuse
-    FragColor = vec4(ambient+diffuse,1.0f);  
+    FragColor = vec4(ambient+diffuse,texValue.a);  
     
 } 

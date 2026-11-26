@@ -50,7 +50,7 @@ glm::vec2 mouseDelta = glm::vec2(0.0f);
 
 //light
 glm::vec3 lightPos;
-glm::vec3 lightCol = glm::vec3(1.0f,1.0f,0.0f);
+glm::vec3 lightCol = glm::vec3(1.0f);
 float lightSpeed = 25.0f;
 #pragma endregion
 
@@ -446,18 +446,18 @@ int main(void)
     //texture loading
     unsigned int texture_0, texture_1;
 
-    LoadTexture(texture_0, "Resources/Textures/container2.png");
-    LoadTexture(texture_1, "Resources/Textures/cat_open.png");
+    LoadTexture(texture_0, "Resources/Textures/brick.jpg");
+    //LoadTexture(texture_1, "Resources/Textures/cat_open.png");
 
     defaultShader.use();
     defaultShader.SetInt("texSampler_0", 0);
-    defaultShader.SetInt("texSampler_1", 1);
+    //defaultShader.SetInt("texSampler_1", 1);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_0);
 
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture_1);
+   /* glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, texture_1);*/
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -510,6 +510,12 @@ int main(void)
         defaultShader.SetVec3("lightCol", lightCol);
         //defaultShader.SetVec3
         //glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture_0);
+
+        /*glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, texture_1);*/
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
