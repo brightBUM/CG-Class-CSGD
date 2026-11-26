@@ -33,7 +33,7 @@ glm::vec3 whiteColor = glm::vec3(1.0f, 1.0f, 1.0f);
 glm::vec3 parrotGreenColor = glm::vec3(0.267f, 0.902f, 0.271f);
 glm::vec3 blueColor = glm::vec3(0.0f, 0.0f, 11.0f);
 
-double worldX, worldY;
+double worldX, worldY,prevX,prevY;
 float xPos = -2.5f;
 std::vector<glm::vec3> points;
 
@@ -51,7 +51,7 @@ glm::vec2 mouseDelta = glm::vec2(0.0f);
 //light
 glm::vec3 lightPos;
 glm::vec3 lightCol = glm::vec3(1.0f,1.0f,0.0f);
-
+float lightSpeed = 25.0f;
 #pragma endregion
 
 #pragma region FwdDeclaration
@@ -59,10 +59,9 @@ glm::vec3 lightCol = glm::vec3(1.0f,1.0f,0.0f);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
     //Log("mouse screen pos : " << xpos << " , "<<ypos);
-    worldX = xpos / (double)Width * 2.0f - 1.0f;
-    worldY = 1.0f - ypos / (double)Height * 2.0f;
-
-    mouseCurrent = glm::vec2(worldX, worldY);
+   
+    worldX = xpos;
+    worldY = ypos;
 
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -180,36 +179,38 @@ void CameraInputs(Camera &cam,GLFWwindow* window)
         cam.ProcessKeyboard(UP, delta);
     }
 
-
-    mouseDelta.x = mouseCurrent.x - mousePrev.x;
-    mouseDelta.y = mousePrev.y - mouseCurrent.y;
-
-    mousePrev = mouseCurrent;
+    double mouseDeltaX = worldX - prevX;
+    double mouseDeltaY = prevY - worldY;
+    prevX = worldX;
+    prevY = worldY;
+    cam.ProcessMouseMovement(mouseDeltaX, mouseDeltaY);
+   
 
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
     {
-        cam.ProcessMouseMovement(mouseDelta.x, mouseDelta.y);
+
+        
     }
 }
 void LightInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        lightPos.y += 0.1f;
+        lightPos.y += 0.1f*delta*lightSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        lightPos.y -= 0.1f;
+        lightPos.y -= 0.1f * delta * lightSpeed;
 
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        lightPos.x -= 0.1f;
+        lightPos.x -= 0.1f * delta * lightSpeed;
 
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        lightPos.x += 0.1f;
+        lightPos.x += 0.1f * delta * lightSpeed;
 
     }
 }
@@ -462,7 +463,7 @@ int main(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #pragma endregion
 
-    Camera cam(glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
+    Camera cam(glm::vec3(0.0f,0.0f,-1.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f, 0.0f);
 
 #pragma region RenderLoop
     //glPointSize(8.0f);
@@ -490,7 +491,6 @@ int main(void)
 
         glm::mat4 proj = glm::mat4(1.0f);
         proj = glm::perspective(glm::radians(45.0f), (float)Width / (float)Height, 0.1f, 100.0f);
-
 
 
         //cube render

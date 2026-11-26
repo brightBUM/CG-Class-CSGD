@@ -30,6 +30,7 @@ void main()
     float diffuseValue = max(dotValue,0.0f);
     vec3 diffuse = diffuseValue*lightCol;
 
-    FragColor = vec4(ambient+diffuse,1.0f);
+    //lambertian diffuse - ambient+diffuse
+    FragColor = vec4(ambient+diffuse,1.0f);  
     
 } 
