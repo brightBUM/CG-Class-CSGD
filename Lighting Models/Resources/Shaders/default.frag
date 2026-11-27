@@ -31,6 +31,6 @@ void main()
     vec3 diffuse = diffuseValue*texValue.rgb*lightCol;
 
     //lambertian diffuse - ambient+diffuse
-    FragColor = vec4(ambient+diffuse,texValue.a);  
+    FragColor = vec4(ambient+diffuse,1.0f);  
     
 } 

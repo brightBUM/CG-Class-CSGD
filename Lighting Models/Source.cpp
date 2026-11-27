@@ -447,7 +447,7 @@ int main(void)
     unsigned int texture_0, texture_1;
 
     LoadTexture(texture_0, "Resources/Textures/brick.jpg");
-    //LoadTexture(texture_1, "Resources/Textures/cat_open.png");
+    LoadTexture(texture_1, "Resources/Textures/container2.png");
 
     defaultShader.use();
     defaultShader.SetInt("texSampler_0", 0);
@@ -494,6 +494,7 @@ int main(void)
 
 
         //cube render
+#pragma region Cube Render
         glm::mat4 model = glm::mat4(1.0f); //identity matrix
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
         //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
@@ -514,12 +515,35 @@ int main(void)
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture_0);
 
-        /*glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, texture_1);*/
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+#pragma endregion
+
+#pragma region Cube2 Render
+        model = glm::mat4(1.0f); //identity matrix
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+        //model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f));
+        model = glm::scale(model, glm::vec3(1.0f));
+
+        defaultShader.use();
+        defaultShader.SetFloat("time", (float)glfwGetTime());
+        defaultShader.SetFloat("mixValue", mixValue);
+        defaultShader.SetFloat("ambientValue", 0.15f);
+        defaultShader.SetMat4("model", model);
+        defaultShader.SetMat4("view", view);
+        defaultShader.SetMat4("proj", proj);
+        defaultShader.SetVec3("lightPos", lightPos);
+        defaultShader.SetVec3("lightCol", lightCol);
+        //defaultShader.SetVec3
+        //glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture_1);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
+#pragma endregion
+#pragma region LightRender
 
         //light render
         model = glm::mat4(1.0f); //identity matrix
@@ -535,6 +559,7 @@ int main(void)
 
         glBindVertexArray(lightVAO);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+#pragma endregion
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
